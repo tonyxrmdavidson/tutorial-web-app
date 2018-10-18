@@ -116,7 +116,7 @@ const handleResourceWatchEvent = (dispatch, walkthroughId, event) => {
 
 /**
  * Retrieves the json document for a specified walkthrough (aka thread).
- * @param {} language Specifies the language end point where the json file is stored.  Used to create multiple localized documenation.
+ * @param {} language Specifies the language end point where the json file is stored. Used to create multiple localized documentation.
  * @param {*} id The ID for the thread.
  */
 const getWalkthrough = (language, id) =>

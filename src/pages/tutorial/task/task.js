@@ -34,6 +34,10 @@ class TaskPage extends React.Component {
         ReactDOM.render(<CopyField value={block.innerText} multiline={block.clientHeight > 40} />, block.parentNode);
       });
     }
+    const currentProgress = this.getStoredProgressForCurrentTask();
+    if (!!currentProgress) {
+      this.setState({ verifications: currentProgress });
+    }
   }
 
   componentDidMount() {
