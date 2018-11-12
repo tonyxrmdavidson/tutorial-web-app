@@ -39,8 +39,15 @@ mvn generate-sources
 ----
 
 [type=verification]
-Once the script has completed, navigate back to the `src/main/java/com/redhat` folder. Notice that there are a bunch of new POJO classes that were created by the Maven script.
+Once the script has completed, navigate back to the `src/main/java/com/redhat` folder. Notice that there are new POJO classes that were created by the Maven script:
 
+. ContactInfo.java
+. Contact.java
+. ContactResponse.java
+. LocationDetailService.java
+. LocationDetailServicePortType.java
+. ObjectFactory.java
+. package-info.java
 
 == Adding a REST route to the soap2rest App
 
