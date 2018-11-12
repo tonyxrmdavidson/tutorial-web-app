@@ -56,19 +56,8 @@ Once the script has completed, navigate back to the `src/main/java/com/redhat` f
 === Adding the REST route
 
 . We need to create our Camel route implementation and create the RESTful
-endpoint. To do this, add the following block below the `// ADD LOCATION ROUTE HERE` comment
-+
-[source,java]
-----
-    rest("/location").description("Location information")
-        .produces("application/json")
-        .get("/contact/{id}").description("Location Contact Info")
-            .responseMessage().code(200).message("Data successfully returned").endResponseMessage()
-            .to("direct:getalllocationphone");
-----
-+
-. We also need to update the cxf value below the `// UPDATE CXF VALUE HERE` comment to `""cxf://http://location-soap-userX.apps.GUID.openshiftworkshop.com/ws/location?serviceClass=com.redhat.LocationDetailServicePortType&defaultOperationName=contact"`
-. TODO: ^^ should be dynamically set by webapp
+endpoint. To do this, open the `CamelRoutes.java` file & uncomment the block below `// LOCATION REST ROUTE` comment
+. We also need to add the cxf service code that the RESTful enpoint will route to. Uncomment the block below the `// CXF SERVICE` comment.
 
 === Testing the REST route
 
