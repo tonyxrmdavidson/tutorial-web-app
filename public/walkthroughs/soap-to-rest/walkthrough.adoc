@@ -26,24 +26,15 @@ TODO: info about the SOAP & soap2rest templates & repos that were created
 
 . TODO steps to setup a workspace and import the soap2rest project from gitea
 
-. Open the `dayinthelife-import/location-soap2rest` project. Open the `pom.xml` file and scroll to the bottom. Uncomment out the `cxf-codegen-plugin` entry at the bottom. Update the `<wsdl>` entry with your fully qualified WSDL 
-URL e.g.
-`http://location-soap-{user}-walkthrough-three.{openshift-router-suffix}/ws/location?wsdl`.
-
-. TODO link for actual wsdl
-. TODO be careful of 63 char limit with the Route name.
-
-[type=verification]
-The wsdl file is served successfully.
+. Open the `pom.xml` file and scroll to the bottom. Uncomment out the `cxf-codegen-plugin` entry at the bottom.
 
 === Generating POJOs from the WSDL contract
 
 . We now need to generate the POJO objects from the WSDL contract. To
 do this, open the Terminal tab and run the below commands:
-TODO: verify below folder is correct for the repo we end up using
 [source,java]
 ----
-cd /projects/dayinthelife-integration/projects/location-soap2rest/
+cd /projects/location-soap2rest/
 mvn generate-sources
 ----
 
