@@ -19,15 +19,19 @@ and Fuse can help with SOAP to REST transformation on OpenShift.
 
 === Enabling the Codegen plugin in the soap2rest App
 
+
+TODO: info about the SOAP & soap2rest templates & repos that were created
+
 . Log in to the link:{che-url}[Che, window="_blank"] Dashboard.
 
-. TODO steps to setup a workspace and import the soap2rest project from gogs
+. TODO steps to setup a workspace and import the soap2rest project from gitea
 
 . Open the `dayinthelife-import/location-soap2rest` project. Open the `pom.xml` file and scroll to the bottom. Uncomment out the `cxf-codegen-plugin` entry at the bottom. Update the `<wsdl>` entry with your fully qualified WSDL 
 URL e.g.
-`http://location-soap-simon-dev.apps.52d6.openshift.opentlc.com/ws/location?wsdl`.
+`http://location-soap-{user}-walkthrough-three.{openshift-router-suffix}/ws/location?wsdl`.
 
 . TODO link for actual wsdl
+. TODO be careful of 63 char limit with the Route name.
 
 [type=verification]
 The wsdl file is served successfully.
@@ -36,88 +40,48 @@ The wsdl file is served successfully.
 
 // image:/walkthroughs/soap-to-rest/images/00-uncomment-codegen.png[00-uncomment-codegen.png,title="Uncomment codegen plugin"]
 . We now need to generate the POJO objects from the WSDL contract. To
-do this, change to the *Manage commands* view and double-click the
-`run generate-sources` script. Click *Run* to execute the script.
+do this, open the Terminal tab and run the below commands:
+TODO: verify below folder is correct for the repo we end up using
+[source,java]
+----
+cd /projects/dayinthelife-integration/projects/location-soap2rest/
+mvn generate-sources
+----
 
 // image:/walkthroughs/soap-to-rest/images/00-generate-sources.png[00-generate-sources.png,title="Generate Sources"]
 
 [type=verification]
-Once the script has completed, navigate back to the *Workspace* view
-and open the `src/main/java/com/redhat` folder. Notice that there are a
-bunch of new POJO classes that were created by the Maven script.
+Once the script has completed, navigate back to the `src/main/java/com/redhat` folder. Notice that there are a bunch of new POJO classes that were created by the Maven script.
 
 
 == Adding a REST route to the soap2rest App
 
-=== TODO
+=== Adding the REST route
 
 // image:/walkthroughs/soap-to-rest/images/00-verify-pojos.png[00-verify-pojos.png,title="Verify Pojos"]
 
-. Open up the `CamelRoutes.java` file. Notice that the existing
-implementation is barebones. First of all, we need to enter the SOAP
-service address and WSDL location for our CXF client to call.
-
-. Secondly,we need to create our Camel route implementation and create the RESTful
-endpoint. To do this, include the following code (making sure to update
-the GUID and username values in the `to("cxf://` URL):
+. We need to create our Camel route implementation and create the RESTful
+endpoint. To do this, add the following block below the `// ADD LOCATION ROUTE HERE` comment
 +
 [source,java]
 ----
-
-...
-
-@Autowired
-private CamelContext camelContext;
-
-private static final String SERVICE_ADDRESS = "http://localhost:8080/ws/location";
-private static final String WSDL_URL = "http://localhost:8080/ws/location?wsdl";
-
-@Override
-public void configure() throws Exception {
-
-... 
-
     rest("/location").description("Location information")
         .produces("application/json")
         .get("/contact/{id}").description("Location Contact Info")
             .responseMessage().code(200).message("Data successfully returned").endResponseMessage()
-            .to("direct:getalllocationphone")
-
-    ;
-
-    from("direct:getalllocationphone")
-        .setBody().simple("${headers.id}")
-        .unmarshal().json(JsonLibrary.Jackson)
-        .to("cxf://http://location-soap-userX.apps.GUID.openshiftworkshop.com/ws/location?serviceClass=com.redhat.LocationDetailServicePortType&defaultOperationName=contact")
-
-        .process(
-                new Processor(){
-
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        //LocationDetail locationDetail = new LocationDetail();
-                        //locationDetail.setId(Integer.valueOf((String)exchange.getIn().getHeader("id")));
-
-                        MessageContentsList list = (MessageContentsList)exchange.getIn().getBody();
-
-                        exchange.getOut().setBody((ContactInfo)list.get(0));
-                    }
-                }
-        )
-
-    ;
-
-    }
-}
+            .to("direct:getalllocationphone");
 ----
++
+. We also need to update the cxf value below the `// UPDATE CXF VALUE HERE` comment to `""cxf://http://location-soap-userX.apps.GUID.openshiftworkshop.com/ws/location?serviceClass=com.redhat.LocationDetailServicePortType&defaultOperationName=contact"`
+. TODO: ^^ should be dynamically set by webapp
+
+=== Testing the REST route
 
 . Now that we have our API service implementation, we can try to test
-this 'locally' in Che. Navigate back to the *Manage commands* view and execute
-the `run spring-boot` script. Click the *Run* button.
-//image:/walkthroughs/soap-to-rest/images/00-local-testing.png[00-local-testing.png]
+this 'locally' in Che. Navigate back to the *Terminal* tab and run
+`MAVEN_OPTS="-Xmx1000m" mvn spring-boot:run -f /projects/dayinthelife-integration/projects/location-soap2rest`. 
 . Once the application starts, navigate to the Servers window and
-click on the URL corresponding to port 8080. A new tab should appear:
-//image:/walkthroughs/soap-to-rest/images/00-select-servers.png[00-select-servers.png]
+click on the URL corresponding to port 8080. A new tab should appear.
 . In the new tab, append the URL with the following URI: `/location/contact/2`.
 
 [type=verification]
@@ -125,22 +89,18 @@ A contact should be returned from the endpoint.
 
 == Deploying the soap2rest App to OpenShift
 
-=== Using the fabric8 maven plugin to deploy to OpenShift
+=== Commit & push repository changes
 
 //image:/walkthroughs/soap-to-rest/images/00-hit-contact-local.png[00-hit-contact-local.png]
 Now that we've successfully tested our new SOAP to REST service
-locally, we can deploy it to OpenShift. Stop the running application by
-clicking *Cancel*. Open the terminal and login using the `oc login`
-command and select your corresponding OCPPROJECT e.g.
-`oc project OCPPROJECT`. Open the `fabic8:deploy` script and hit the
-*Run* button to deploy it to OpenShift.
-+
-//image:/walkthroughs/soap-to-rest/images/00-mvn-f8-deploy.png[00-mvn-f8-deploy.png,title="Maven Fabric8 Deploy"]
-If the deployment script completes successfully, navigate back to
-your OCPPROJECT web console and verify the pod is running
+locally, we can deploy it to OpenShift. First we need push our file changes back to the git repository.
+
+. TODO git steps in Che
+
+. TODO kick off a build (if webhook isn't possible)
 
 [type=verification]
-Check that thing.
+TODO navigate to the route of the deployed soap2rest app and verify the /location/contact/2 endpoint
 
 == Managing the REST route
 
@@ -149,4 +109,4 @@ Check that thing.
 TODO: 3scale
 
 [type=verification]
-Check that thing.
+TODO call the 3Scale apicast staging route with the user_key param.
