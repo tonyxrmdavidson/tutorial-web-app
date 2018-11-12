@@ -38,7 +38,6 @@ The wsdl file is served successfully.
 
 === Generating POJOs from the WSDL contract
 
-// image:/walkthroughs/soap-to-rest/images/00-uncomment-codegen.png[00-uncomment-codegen.png,title="Uncomment codegen plugin"]
 . We now need to generate the POJO objects from the WSDL contract. To
 do this, open the Terminal tab and run the below commands:
 TODO: verify below folder is correct for the repo we end up using
@@ -48,8 +47,6 @@ cd /projects/dayinthelife-integration/projects/location-soap2rest/
 mvn generate-sources
 ----
 
-// image:/walkthroughs/soap-to-rest/images/00-generate-sources.png[00-generate-sources.png,title="Generate Sources"]
-
 [type=verification]
 Once the script has completed, navigate back to the `src/main/java/com/redhat` folder. Notice that there are a bunch of new POJO classes that were created by the Maven script.
 
@@ -57,8 +54,6 @@ Once the script has completed, navigate back to the `src/main/java/com/redhat` f
 == Adding a REST route to the soap2rest App
 
 === Adding the REST route
-
-// image:/walkthroughs/soap-to-rest/images/00-verify-pojos.png[00-verify-pojos.png,title="Verify Pojos"]
 
 . We need to create our Camel route implementation and create the RESTful
 endpoint. To do this, add the following block below the `// ADD LOCATION ROUTE HERE` comment
@@ -91,7 +86,6 @@ A contact should be returned from the endpoint.
 
 === Commit & push repository changes
 
-//image:/walkthroughs/soap-to-rest/images/00-hit-contact-local.png[00-hit-contact-local.png]
 Now that we've successfully tested our new SOAP to REST service
 locally, we can deploy it to OpenShift. First we need push our file changes back to the git repository.
 
