@@ -161,7 +161,7 @@ Note that this route should point to the shared staging APIcast in the *3scale* 
 Check that the API service is available.
 You might encounter a *403: Authentication failed* message. You can ignore this message, the issue is resolved in a later step.
 
-=== Creating an Appliation Plan 
+=== Creating an Application Plan 
 
 . Create a new *Application Plan*:
 .. Select *Application Plans* from the left menu.
