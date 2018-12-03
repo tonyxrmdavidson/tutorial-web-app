@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
-import { noop, Button, ButtonGroup, Grid, Icon, Radio, Alert } from 'patternfly-react';
+import { noop, Button, ButtonGroup, Grid, Icon, Radio } from 'patternfly-react';
 import { connect, reduxActions } from '../../../redux';
 import Breadcrumb from '../../../components/breadcrumb/breadcrumb';
 import LoadingScreen from '../../../components/loadingScreen/loadingScreen';
@@ -34,10 +34,10 @@ class TaskPage extends React.Component {
         ReactDOM.render(<CopyField value={block.innerText} multiline={block.clientHeight > 40} />, block.parentNode);
       });
     }
-    const currentProgress = this.getStoredProgressForCurrentTask();
-    if (!!currentProgress) {
-      this.setState({ verifications: currentProgress });
-    }
+    // const currentProgress = this.getStoredProgressForCurrentTask();
+    // if (currentProgress) {
+    //   this.setState({ verifications: currentProgress });
+    // }
   }
 
   componentDidMount() {

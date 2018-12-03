@@ -18,14 +18,6 @@ const configPath = process.env.SERVER_EXTRA_CONFIG_FILE || '/etc/webapp/customSe
 const DEFAULT_CUSTOM_CONFIG_DATA = {
   services: []
 };
-const CONTEXT_PREAMBLE = 'preamble';
-const CONTEXT_PARAGRAPH = 'paragraph';
-
-const walkthroughs = [];
-
-app.get('/customWalkthroughs', (req, res) => {
-  res.status(200).json(walkthroughs);
-});
 
 const walkthroughLocations = process.env.WALKTHROUGH_LOCATIONS || './public/walkthroughs';
 
@@ -123,7 +115,6 @@ function loadAllWalkthroughs(location) {
 
 function loadCustomWalkthroughs(walkthroughsPath) {
   fs.readdir(walkthroughsPath, (err, files) => {
-
     files.forEach(dirName => {
       const basePath = path.join(walkthroughsPath, dirName);
       fs.readFile(path.join(basePath, 'walkthrough.adoc'), (readError, rawAdoc) => {
@@ -148,7 +139,7 @@ function loadCustomWalkthroughs(walkthroughsPath) {
 }
 
 function getCustomConfigData(configPath) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     if (!configPath) {
       return resolve(DEFAULT_CUSTOM_CONFIG_DATA);
     }
@@ -223,7 +214,7 @@ function getMockConfigData() {
         }
       ]
     }
-  };`
+  };`;
 }
 
 function getConfigData(req) {
@@ -248,7 +239,9 @@ function getConfigData(req) {
     scopes: ['user:full'],
     masterUri: 'https://${process.env.OPENSHIFT_HOST}',
     wssMasterUri: 'wss://${process.env.OPENSHIFT_HOST}',
-    ssoLogoutUri: 'https://${process.env.SSO_ROUTE}/auth/realms/openshift/protocol/openid-connect/logout?redirect_uri=${logoutRedirectUri}'
+    ssoLogoutUri: 'https://${
+      process.env.SSO_ROUTE
+    }/auth/realms/openshift/protocol/openid-connect/logout?redirect_uri=${logoutRedirectUri}'
   };`;
 }
 
@@ -278,7 +271,7 @@ function getWalkthroughInfoFromAdoc(id, dirName, doc) {
   };
 }
 
-const getTotalWalkthroughTime = (doc) => {
+const getTotalWalkthroughTime = doc => {
   let time = 0;
   doc.blocks.forEach(b => {
     if (b.context === CONTEXT_PREAMBLE || b.context === CONTEXT_PARAGRAPH) {
