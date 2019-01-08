@@ -204,6 +204,15 @@ class WalkthroughResourceStep {
   static fromAdoc(adoc) {
     const service = adoc.getAttribute('serviceName');
     const html = adoc.blocks[0] ? adoc.blocks[0].convert() : '';
+
+    // console.log('(1) inside WTRStep-fromAdoc, html= ', html);
+    // console.log('(2) inside WTRStep-fromAdoc, service= ', service);
+    // console.log('(3) inside WTRStep-fromAdoc, adoc.title= ', adoc.title);
+    // console.log('=====================');
+    // console.log('(4) adoc.blocks[0]=', adoc.blocks[0]);
+    // console.log('(5) adoc.blocks[0].convert()=', adoc.blocks[0].convert());
+    // console.log('(6) adoc=', adoc);
+
     return new WalkthroughResourceStep(html, service, adoc.title);
   }
 }
@@ -238,6 +247,14 @@ class WalkthroughResource {
   static fromAdoc(adoc) {
     const service = adoc.getAttribute('serviceName');
     const html = adoc.blocks[0] ? adoc.blocks[0].convert() : '';
+    console.log('(1) inside WTR-fromAdoc, html= ', html);
+    console.log('(2) inside WTR-fromAdoc, service= ', service);
+    console.log('(3) inside WTR-fromAdoc, adoc.title= ', adoc.title);
+    console.log('=====================');
+    console.log('(4) adoc.blocks[0]=', adoc.blocks[0]);
+    console.log('(5) adoc.blocks[0].convert()=', adoc.blocks[0].convert());
+    console.log('(6) adoc=', adoc);
+
     return new WalkthroughResource(html, service, adoc.title);
   }
 }
@@ -362,7 +379,6 @@ class Walkthrough {
     if (adoc.blocks.length < 1) {
       throw new Error(`Invalid Walkthrough ${title}`);
     }
-
     const resources = this.collectWalkthroughResources(adoc.blocks[0]);
     const preamble = adoc.blocks[0].convert();
     const tasks = adoc.blocks.filter(b => WalkthroughTask.canConvert(b)).map(b => WalkthroughTask.fromAdoc(b));
