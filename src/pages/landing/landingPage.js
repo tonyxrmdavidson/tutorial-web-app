@@ -7,11 +7,21 @@ import LandingPageMastHead from './landingPageMastHead';
 import InstalledAppsView from '../../components/installedAppsView/InstalledAppsView';
 import { connect, reduxActions } from '../../redux';
 
+// import { packageJson } from '../../../package.json';
+const pkgJson = require('../../../package.json');
+
 class LandingPage extends React.Component {
   componentDidMount() {
     const { getProgress, getCustomWalkthroughs } = this.props;
     getCustomWalkthroughs();
     getProgress();
+
+    // mf011018 - testing env vars
+    console.log('***************************');
+    console.log('Environment variables begin');
+    console.log(process.env);
+    console.log('Environment variables end');
+    console.log('***************************');
   }
 
   render() {
@@ -21,6 +31,10 @@ class LandingPage extends React.Component {
         <PfMasthead />
         <LandingPageMastHead />
         <main>
+          <p>
+            Web App version: {pkgJson.version}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integreatly version: TBD
+          </p>
           <section className="integr8ly-landing-page-tutorial-dashboard-section">
             <TutorialDashboard
               className="integr8ly-landing-page-tutorial-dashboard-section-left"
