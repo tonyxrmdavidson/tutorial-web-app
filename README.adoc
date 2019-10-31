@@ -278,7 +278,6 @@ git push --tags
 
 When the changes are pushed this will trigger a new release build. If the build is successful, a new image will be pushed to https://quay.io/repository/integreatly/tutorial-web-app.
 The new image will be tagged as `latest` and the version number `x.y.z`.
-
 === Update the WebApp Operator
 
 Update the version of the webapp image (DeploymentConfig) and walkthroughs tag (WALKTHROUGH_LOCATIONS param) in https://github.com/integr8ly/tutorial-web-app-operator/blob/master/deploy/template/tutorial-web-app.yml & create PR back to master.
